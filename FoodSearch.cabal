@@ -13,11 +13,13 @@ executable FoodSearch
                    LambdaNet,
                    vector,
                    random,
-                   hmatrix
+                   hmatrix,
+                   pretty
   ghc-options:     -Wall
   other-modules:   
                    AI.FoodSearch.Base,
-                   AI.FoodSearch.Neural
+                   AI.FoodSearch.Neural,
+                   AI.FoodSearch.Pretty
 
 test-suite foodsearch-test
   type:            exitcode-stdio-1.0
@@ -28,11 +30,13 @@ test-suite foodsearch-test
                    LambdaNet,
                    vector,
                    random,
-                   hmatrix
+                   hmatrix,
+                   pretty
   other-modules:   
                   AI.FoodSearch.Base,
                   AI.FoodSearch.BaseTest,
-                  AI.FoodSearch.Neural
+                  AI.FoodSearch.Neural,
+                  AI.FoodSearch.Pretty
   hs-source-dirs:  
                   test,
                   src

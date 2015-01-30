@@ -24,6 +24,10 @@ type Max = Int
 dirLength :: Int
 dirLength = 9
 
+-- | Index of direction meaning "no move"
+noMove :: Direction
+noMove = 5
+
 -- | Function deciding in which direction to move
 type StepFunction = Position -> Input -> Direction
 
@@ -49,14 +53,24 @@ algStepExplain w f p = let
   allSmells = map (\n->(n,fromMaybe 0 $ DM.lookup n $ wSmells w)) $ allNeighbours p
   posWithSmells = zip [0..] $ map snd allSmells
   dir = f p posWithSmells
-  in (map fst allSmells !! dir,(posWithSmells,dir))
+  newPos = map fst allSmells !! dir
+  in if isValid w newPos -- defensive
+    then (newPos,(posWithSmells,dir))
+    else (p,(posWithSmells,noMove))
 
 -- | Perform all algorithm steps till arriving at food or max steps
-algSteps :: World -> StepFunction -> Max -> Position -> Position
-algSteps w f maxIt p 
-  | foundFood w p = p
-  | maxIt == 0    = p
-  | otherwise     = algSteps w f (maxIt-1) $ algStep w f p
+algSteps :: World -> StepFunction -> Max -> Position -> [Position]
+algSteps w f maxIt p = reverse $ go maxIt [p]
+  where
+    go _ [] = error "garg"
+    go m ps@(p2:_)
+      | foundFood w p2 = ps
+      | m == 0         = ps
+      | otherwise      = go (maxIt-1) (algStep w f p2 : ps)
+
+-- | is the position valid?
+isValid ::  World -> Position -> Bool
+isValid w p =p `DM.member` wSmells w
 
 -- | Smell of the given position
 currentSmell :: World -> Position -> Smell

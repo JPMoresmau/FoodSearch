@@ -42,8 +42,8 @@ baseTests = do
         algStep w baseAlg (1,1) @?= (2,2)
         algStep w baseAlg (2,2) @?= (2,2)
     , testCase "Base Algorithm Full" $ do
-        algSteps w baseAlg 5 (0,0) @?= (2,2)
-        algSteps w baseAlg 1 (0,0) @?= (1,1)
-        algSteps w baseAlg 5 (4,4) @?= (2,2)
+        algSteps w baseAlg 5 (0,0) @?= [(0,0),(1,1),(2,2)]
+        algSteps w baseAlg 1 (0,0) @?= [(0,0),(1,1)]
+        algSteps w baseAlg 5 (4,4) @?= [(4,4),(3,3),(2,2)]
     ]
   
