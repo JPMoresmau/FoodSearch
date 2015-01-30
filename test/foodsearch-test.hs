@@ -1,13 +1,14 @@
+-- | Test entry point
 module Main where
 import AI.FoodSearch.BaseTest
 
 
 import Test.Tasty
-import Test.Tasty.QuickCheck as QC
-import Test.Tasty.HUnit
 
+-- | Main entry point
 main :: IO()
 main = defaultMain tests
 
+-- | Test definitions
 tests :: TestTree
 tests = testGroup "Tests" [baseTests]

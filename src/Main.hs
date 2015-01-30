@@ -1,9 +1,11 @@
+-- | Main entry point
 module Main where
 
 import System.Random
 import AI.FoodSearch.Base
 import AI.FoodSearch.Neural
 
+-- | entry function
 main::IO()
 main = do
   let sz = (5,5)

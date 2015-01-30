@@ -1,3 +1,4 @@
+-- | Base module tests
 module AI.FoodSearch.BaseTest where
 import AI.FoodSearch.Base
 
@@ -6,7 +7,7 @@ import Test.Tasty
 import Test.Tasty.HUnit
 
 
-
+-- | Test base algorithm
 baseTests :: TestTree
 baseTests = do
   let sz = (5,5)

@@ -1,3 +1,4 @@
+-- | Base types and functions
 module AI.FoodSearch.Base where
 
 import Data.List (maximumBy)
@@ -6,30 +7,43 @@ import Data.Ord
 
 import qualified Data.Map as DM
 
+-- | Direction to go to
 type Direction = Int
+-- | Strength of the smell
 type Smell = Int
-
+-- | Input information
 type Input = [(Direction,Smell)]
-
+-- | Position in word
 type Position = (Int,Int)
+-- | Size of the world
 type Size = (Int,Int)
+-- | Maximum number of steps to take
+type Max = Int
 
+-- | Number of directions
+dirLength :: Int
+dirLength = 9
+
+-- | Function deciding in which direction to move
 type StepFunction = Position -> Input -> Direction
 
+-- | The world
 data World = World
-    { wSize   :: Size
-    , wSmell  :: Smell
-    , wSmells :: DM.Map Position Smell
+    { wSize   :: Size -- ^ size
+    , wSmell  :: Smell -- ^ Smell of the food position
+    , wSmells :: DM.Map Position Smell -- ^ All smell strengths by position
     }
     deriving (Show,Read,Eq,Ord)
 
+-- | The base algorithm: just go toward the highest smell
 baseAlg :: StepFunction
 baseAlg _ = fst . maximumBy (comparing snd)
 
-
+-- | Perform one step of the algorithm
 algStep :: World -> StepFunction -> Position -> Position
 algStep w f p = fst $ algStepExplain w f p
 
+-- | Perform one step and return the information generated: direction/smell input, direction output
 algStepExplain :: World -> StepFunction -> Position -> (Position,([(Direction,Smell)],Direction))
 algStepExplain w f p = let
   allSmells = map (\n->(n,fromMaybe 0 $ DM.lookup n $ wSmells w)) $ allNeighbours p
@@ -37,24 +51,25 @@ algStepExplain w f p = let
   dir = f p posWithSmells
   in (map fst allSmells !! dir,(posWithSmells,dir))
 
-algSteps :: World -> StepFunction -> Int -> Position -> Position
+-- | Perform all algorithm steps till arriving at food or max steps
+algSteps :: World -> StepFunction -> Max -> Position -> Position
 algSteps w f maxIt p 
   | foundFood w p = p
   | maxIt == 0    = p
   | otherwise     = algSteps w f (maxIt-1) $ algStep w f p
 
-
+-- | Smell of the given position
 currentSmell :: World -> Position -> Smell
 currentSmell w p = 
   fromMaybe 
     (error $ show p ++ " is an invalid position") 
     (DM.lookup p $ wSmells w)
 
-
+-- | Have we found food?
 foundFood ::  World -> Position -> Bool
 foundFood w p = wSmell w == currentSmell w p
 
-
+-- | Build the world of the given size, with the food at the given position with the given smell strength
 buildWorld :: Size -> Position -> Smell -> World
 buildWorld sz pos smell = World sz smell smells
     where 
@@ -67,15 +82,17 @@ buildWorld sz pos smell = World sz smell smells
            in waft (rest++ map (\n->(n,sm2)) ns) dm2
 
 
+-- | Get reachable neighbours of the given position
 neighbours :: Position -> Size -> [Position]
 neighbours p (w,h) = filter ok $ allNeighbours p
   where
     ok (a,b) = a>=0 && a < w && b>=0 && b < h && (a,b) /= p
 
-
+-- | Get all neighbours, even if outside world or given position itself
 allNeighbours :: Position -> [Position]
 allNeighbours (x,y) = [(a,b) | a <- [x-1,x,x+1]
                                 , b <- [y-1,y,y+1]]
 
+-- | Get all positions in the world
 allPositions :: World -> [Position]
 allPositions = DM.keys . wSmells
