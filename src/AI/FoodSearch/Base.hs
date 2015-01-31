@@ -15,7 +15,7 @@ data Direction = TopLeft | Left | BottomLeft | Top | Center | Bottom | TopRight 
 type Smell = Int
 -- | Input information
 type Input = [(Direction,Smell)]
--- | Position in word
+-- | Position in world
 type Position = (Int,Int)
 -- | Size of the world
 type Size = (Int,Int)

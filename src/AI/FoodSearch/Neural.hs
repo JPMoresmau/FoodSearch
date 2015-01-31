@@ -23,7 +23,7 @@ trainData w = map onePos $ allPositions w
       
 -- | Format the inputs suitable for the network
 formatInputs ::  World -> [(Direction,Smell)] ->  Vector Float
-formatInputs  w =   fromList . map (\i-> fromIntegral (snd i) / fromIntegral (wSmell w))   
+formatInputs w =   fromList . map (\i-> fromIntegral (snd i) / fromIntegral (wSmell w))   
 
 
 -- | Create the network
