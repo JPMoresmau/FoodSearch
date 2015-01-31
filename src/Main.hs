@@ -17,11 +17,15 @@ main = do
       pos = (5,6)
       w = buildWorld sz pos sm
       trained = train w (mkStdGen 4)
-      start = (2,0)
-      s0 = algSteps w (neuralAlg w trained) 10 start
+      sz2 = (8,10)
+      sm2 = 5
+      pos2 = (3,3)
+      w2 = buildWorld sz2 pos2 sm2
+      start = (7,7)
+      s0 = algSteps w2 (neuralAlg w2 trained) 10 start
   mapM_ (\(nb,st)->do
     putStrLn $ "Iteration " ++ show nb
-    putStrLn $ render $ pprPosition w st
+    putStrLn $ render $ pprPosition w2 st
     putStrLn "") $ zip [1..] s0
 --  print s0
 --  print $ map (\p->(p,currentSmell w p)) $ allPositions w
