@@ -36,7 +36,8 @@ test-suite foodsearch-test
                   AI.FoodSearch.Base,
                   AI.FoodSearch.BaseTest,
                   AI.FoodSearch.Neural,
-                  AI.FoodSearch.Pretty
+                  AI.FoodSearch.Pretty,
+                  AI.FoodSearch.NeuralTest
   hs-source-dirs:  
                   test,
                   src

@@ -1,7 +1,7 @@
 -- | Base module tests
 module AI.FoodSearch.BaseTest where
-import AI.FoodSearch.Base
 
+import AI.FoodSearch.Base
 
 import Test.Tasty
 import Test.Tasty.HUnit

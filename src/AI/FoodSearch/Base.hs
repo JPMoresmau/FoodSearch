@@ -65,7 +65,7 @@ algSteps w f maxIt p = reverse $ go maxIt [p]
     go m ps@(p2:_)
       | foundFood w p2 = ps
       | m == 0         = ps
-      | otherwise      = go (maxIt-1) (algStep w f p2 : ps)
+      | otherwise      = go (m-1) (algStep w f p2 : ps)
 
 -- | is the position valid?
 isValid ::  World -> Position -> Bool
