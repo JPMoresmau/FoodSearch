@@ -18,7 +18,7 @@ trainData w = map onePos $ allPositions w
   where
     onePos p = 
       let (_,(is,dir)) = algStepExplain w baseAlg p
-          os = map (\(ix,_)->if dir==ix then 1 else 0) $ zip [0..] is 
+          os = map (\(d,_)->if dir==d then 1 else 0) is 
       in (formatInputs w is,fromList os)
       
 -- | Format the inputs suitable for the network
@@ -39,4 +39,4 @@ train w g =
 
 -- | Use the network to give the answer 
 neuralAlg ::  World -> Network Float -> StepFunction
-neuralAlg w n _ is = maxIndex $ predict (formatInputs w is) n 
+neuralAlg w n _ is = toEnum $ maxIndex $ predict (formatInputs w is) n 

@@ -8,7 +8,9 @@ import Data.Ord
 import qualified Data.Map as DM
 
 -- | Direction to go to
-type Direction = Int
+data Direction = TopLeft | Left | BottomLeft | Top | Center | Bottom | TopRight | Right | BottomRight
+  deriving (Show,Read,Eq,Ord,Bounded,Enum)
+
 -- | Strength of the smell
 type Smell = Int
 -- | Input information
@@ -22,11 +24,8 @@ type Max = Int
 
 -- | Number of directions
 dirLength :: Int
-dirLength = 9
+dirLength = 1 + fromEnum (maxBound :: Direction)
 
--- | Index of direction meaning "no move"
-noMove :: Direction
-noMove = 5
 
 -- | Function deciding in which direction to move
 type StepFunction = Position -> Input -> Direction
@@ -51,12 +50,12 @@ algStep w f p = fst $ algStepExplain w f p
 algStepExplain :: World -> StepFunction -> Position -> (Position,([(Direction,Smell)],Direction))
 algStepExplain w f p = let
   allSmells = map (\n->(n,fromMaybe 0 $ DM.lookup n $ wSmells w)) $ allNeighbours p
-  posWithSmells = zip [0..] $ map snd allSmells
+  posWithSmells = zip [minBound..] $ map snd allSmells
   dir = f p posWithSmells
-  newPos = map fst allSmells !! dir
+  newPos = map fst allSmells !! fromEnum dir
   in if isValid w newPos -- defensive
     then (newPos,(posWithSmells,dir))
-    else (p,(posWithSmells,noMove))
+    else (p,(posWithSmells,Center))
 
 -- | Perform all algorithm steps till arriving at food or max steps
 algSteps :: World -> StepFunction -> Max -> Position -> [Position]
