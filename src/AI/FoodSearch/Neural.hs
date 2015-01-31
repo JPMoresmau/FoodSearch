@@ -26,16 +26,18 @@ formatInputs ::  World -> [(Direction,Smell)] ->  Vector Float
 formatInputs  w =   fromList . map (\i-> fromIntegral (snd i) / fromIntegral (wSmell w))   
 
 
--- | Train a network on the given world
-train :: RandomGen g => World -> g -> Network Float
-train w g = 
-  let l = LayerDefinition sigmoidNeuron dirLength connectFully
-      l' = LayerDefinition sigmoidNeuron dirLength connectFully
-      l'' = LayerDefinition sigmoidNeuron dirLength connectFully
-      n = createNetwork normals g [l, l', l'']
-      t = BackpropTrainer (3 :: Float) quadraticCost quadraticCost'
-      dat = trainData w
+-- | Create the network
+buildNetwork :: RandomGen g => g -> Network Float
+buildNetwork g = createNetwork normals g $ replicate 3 $ LayerDefinition sigmoidNeuron dirLength connectFully
+
+
+-- | Train a network on several given worlds
+train :: Network Float -> [World] -> Network Float
+train n ws = 
+  let t = BackpropTrainer (3 :: Float) quadraticCost quadraticCost'
+      dat = concatMap trainData ws
   in trainUntilErrorLessThan n t online dat 0.01
+
 
 -- | Use the network to give the answer 
 neuralAlg ::  World -> Network Float -> StepFunction

@@ -15,23 +15,30 @@ neuralTests = do
       sm = 3
       pos = (2,2)
       w = buildWorld sz pos sm
-      trained = train w (mkStdGen 4)
+      n = buildNetwork (mkStdGen 4)
+      sz2 = (15,20)
+      sm2 = 20
+      pos2 = (5,10)
+      w2 = buildWorld sz2 pos2 sm2
+      trained = train n [w,w2] 
   testGroup "NeuralTests" 
     [ testCase "Same World" $ do
         let s0 = algSteps w (neuralAlg w trained) 10 (0,0)
+        let s1 = algSteps w (neuralAlg w trained) 10 (4,4)
         s0 @?= [(0,0),(1,1),(2,2)]
+        s1 @?= [(4,4),(3,3),(2,2)]
     , testCase "Other World, same size" $ do
-        let pos2 = (3,3)
-            w2 = buildWorld sz pos2 4
-            s0 = algSteps w2 (neuralAlg w2 trained) 10 (0,0)
+        let pos3 = (3,3)
+            w3 = buildWorld sz pos3 4
+            s0 = algSteps w3 (neuralAlg w3 trained) 10 (0,0)
+            s1 = algSteps w3 (neuralAlg w3 trained) 10 (4,4)
         s0 @?= [(0,0),(1,1),(2,2),(3,3)]
+        s1 @?= [(4,4),(3,3)]
     , testCase "Other World" $ do
-        let sz2 = (8,10)
-            sm2 = 8
-            pos2 = (3,3)
-            w2 = buildWorld sz2 pos2 sm2
-            s0 = algSteps w2 (neuralAlg w2 trained) 10 (7,7)
-        print w2
-        -- he this fails, our network is overfitted
+        let sz3 = (8,10)
+            sm3 = 8
+            pos3 = (3,3)
+            w3 = buildWorld sz3 pos3 sm3
+            s0 = algSteps w3 (neuralAlg w3 trained) 10 (7,7)
         s0 @?= [(7,7),(6,7),(6,6),(5,5),(4,4),(3,3)]
     ]
