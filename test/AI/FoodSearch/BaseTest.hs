@@ -11,9 +11,8 @@ import Test.Tasty.HUnit
 baseTests :: TestTree
 baseTests = do
   let sz = (5,5)
-      sm = 3
       pos = (2,2)
-      w = buildWorld sz pos sm
+      w = buildWorld sz pos
   testGroup "BaseTests" 
     [ testCase "Neighbours" $ do
         let sz1=(3,3)

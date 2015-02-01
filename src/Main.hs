@@ -13,15 +13,13 @@ import AI.FoodSearch.Pretty
 main::IO()
 main = do
   let sz = (10,10)
-      sm = 5
       pos = (5,6)
-      w = buildWorld sz pos sm
+      w = buildWorld sz pos
       n = buildNetwork (mkStdGen 4)
       trained = train n [w]
       sz2 = (8,10)
-      sm2 = 5
       pos2 = (3,3)
-      w2 = buildWorld sz2 pos2 sm2
+      w2 = buildWorld sz2 pos2
       start = (7,7)
       s0 = algSteps w2 (neuralAlg w2 trained) 10 start
   mapM_ (\(nb,st)->do

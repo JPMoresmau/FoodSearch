@@ -82,11 +82,14 @@ currentSmell w p =
 foundFood ::  World -> Position -> Bool
 foundFood w p = wSmell w == currentSmell w p
 
--- | Build the world of the given size, with the food at the given position with the given smell strength
-buildWorld :: Size -> Position -> Smell -> World
-buildWorld sz pos smell = World sz smell smells
+-- | Build the world of the given size, with the food at the given position
+buildWorld :: Size -> Position -> World
+buildWorld sz pos = World sz maxSmell smells
     where 
-      smells = waft [(pos,smell)] $ DM.singleton pos smell
+      maxSmell = 1 + maximum (map (distance pos) corners)
+      corners  = [(x,y) | x<-[0,fst sz - 1],y<-[0,snd sz - 1]]
+      distance (a,b) (c,d) = maximum [abs $ a - c, abs $ b - d]
+      smells = waft [(pos,maxSmell)] $ DM.singleton pos maxSmell
       waft [] dm  = dm
       waft ((p,sm):rest) dm = 
            let ns  = filter (`DM.notMember` dm) $ neighbours p sz
