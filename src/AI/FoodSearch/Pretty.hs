@@ -29,3 +29,9 @@ pprWorld' wrld mp = let
       | mp == Just (x,y) = '@' 
       | foundFood wrld (x,y) = 'X'
       | otherwise= '.'
+
+-- | Show a progression of positions      
+pprPath :: World -> [Position] -> Doc
+pprPath w = vcat . zipWith pprPathIdx [1 ..]
+  where
+    pprPathIdx idx pos = vcat [text "Iteration:" <> int idx,pprPosition w pos]

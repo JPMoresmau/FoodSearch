@@ -44,5 +44,8 @@ neuralTests = do
             pos3 = (3,3)
             w3 = buildWorld sz3 pos3
             s0 = algSteps w3 (neuralAlg w3 trained2) 10 (7,7)
+        let tv= toVectors trained
+        print $ length tv
+        print $ map (length . fst) tv
         s0 @?= [(7,7),(6,7),(6,6),(5,5),(4,4),(3,3)]
     ]

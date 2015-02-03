@@ -14,12 +14,15 @@ executable FoodSearch
                    vector,
                    random,
                    hmatrix,
-                   pretty
-  ghc-options:     -Wall
+                   pretty,
+                   MonadRandom,
+                   simple-genetic-algorithm>=0.3.0, deepseq
+  ghc-options:     -Wall -threaded -O2 -rtsopts
   other-modules:   
                    AI.FoodSearch.Base,
                    AI.FoodSearch.Neural,
-                   AI.FoodSearch.Pretty
+                   AI.FoodSearch.Pretty,
+                   AI.FoodSearch.Genetic
 
 test-suite foodsearch-test
   type:            exitcode-stdio-1.0
@@ -31,13 +34,16 @@ test-suite foodsearch-test
                    vector,
                    random,
                    hmatrix,
-                   pretty
+                   pretty,
+                   MonadRandom,
+                   simple-genetic-algorithm>=0.2.1
   other-modules:   
                   AI.FoodSearch.Base,
                   AI.FoodSearch.BaseTest,
                   AI.FoodSearch.Neural,
                   AI.FoodSearch.Pretty,
-                  AI.FoodSearch.NeuralTest
+                  AI.FoodSearch.NeuralTest,
+                  AI.FoodSearch.Genetic
   hs-source-dirs:  
                   test,
                   src

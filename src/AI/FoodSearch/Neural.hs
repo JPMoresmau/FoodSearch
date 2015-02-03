@@ -31,9 +31,12 @@ formatInputs w =   fromList . map (\i-> fromIntegral (snd i) / fromIntegral (wSm
 layerDef :: LayerDefinition Float
 layerDef = LayerDefinition sigmoidNeuron dirLength connectFully
 
+allLayersDef :: [LayerDefinition Float]
+allLayersDef = replicate 3 layerDef
+
 -- | Create the network
 buildNetwork :: RandomGen g => g -> Network Float
-buildNetwork g = createNetwork normals g $ replicate 3 layerDef
+buildNetwork g = createNetwork normals g allLayersDef
 
 
 -- | Train a network on several given worlds

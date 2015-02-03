@@ -3,8 +3,10 @@ module Main where
 
 import Text.PrettyPrint
 import System.Random
+import AI.GeneticAlgorithm.Simple
 
 import AI.FoodSearch.Base
+import AI.FoodSearch.Genetic
 import AI.FoodSearch.Neural
 import AI.FoodSearch.Pretty
 
@@ -22,13 +24,10 @@ main = do
       w2 = buildWorld sz2 pos2
       start = (7,7)
       s0 = algSteps w2 (neuralAlg w2 trained) 10 start
-  mapM_ (\(nb,st)->do
-    putStrLn $ "Iteration " ++ show nb
-    putStrLn $ render $ pprPosition w2 st
-    putStrLn "") $ zip [1..] s0
---  print s0
---  print $ map (\p->(p,currentSmell w p)) $ allPositions w
---  print $ algStepExplain w baseAlg (0,1)
---  let (_,(is,dir)) = algStepExplain w baseAlg (0,1)
---  print $ formatInputs w is
---  print $ trainData w
+  putStrLn $ render $ pprPath w2 s0
+  r@(NetworkData vxs _) <-runGAIO 64 0.1 (buildNetworkData [w,w2]) stopf
+  print $ fitness r
+  let trainedGA = fromVectors layerDef vxs
+      s1 = algSteps w2 (neuralAlg w2 trainedGA) 10 start
+  putStrLn $ render $ pprPath w2 s1
+  

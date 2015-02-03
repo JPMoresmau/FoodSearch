@@ -33,6 +33,7 @@ type StepFunction = Position -> Input -> Direction
 -- | The world
 data World = World
     { wSize   :: Size -- ^ size
+    , wFood   :: Position -- ^ Position of the food
     , wSmell  :: Smell -- ^ Smell of the food position
     , wSmells :: DM.Map Position Smell -- ^ All smell strengths by position
     }
@@ -80,15 +81,13 @@ currentSmell w p =
 
 -- | Have we found food?
 foundFood ::  World -> Position -> Bool
-foundFood w p = wSmell w == currentSmell w p
+foundFood w p = wFood w == p
 
 -- | Build the world of the given size, with the food at the given position
 buildWorld :: Size -> Position -> World
-buildWorld sz pos = World sz maxSmell smells
+buildWorld sz pos = World sz pos maxSmell smells
     where 
-      maxSmell = 1 + maximum (map (distance pos) corners)
-      corners  = [(x,y) | x<-[0,fst sz - 1],y<-[0,snd sz - 1]]
-      distance (a,b) (c,d) = maximum [abs $ a - c, abs $ b - d]
+      maxSmell = 1 + maximum (map (distance pos) $ corners sz)
       smells = waft [(pos,maxSmell)] $ DM.singleton pos maxSmell
       waft [] dm  = dm
       waft ((p,sm):rest) dm = 
@@ -97,6 +96,14 @@ buildWorld sz pos = World sz maxSmell smells
                dm2 = foldr (`DM.insert` sm2) dm ns
            in waft (rest++ map (\n->(n,sm2)) ns) dm2
 
+
+-- | Distance between two positions.
+distance :: Position -> Position -> Int
+distance (a,b) (c,d) = maximum [abs $ a - c, abs $ b - d]
+
+-- | the corners of a world
+corners :: Size -> [Position]
+corners sz = [(x,y) | x<-[0,fst sz - 1],y<-[0,snd sz - 1]]
 
 -- | Get reachable neighbours of the given position
 neighbours :: Position -> Size -> [Position]
