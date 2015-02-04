@@ -67,7 +67,7 @@ fitFormula w endSmell possLenth dist = case fromIntegral endSmell / fromIntegral
     1 -> 2 + (fromIntegral dist / fromIntegral possLenth)
     n -> n
 
--- | Maximum for the fitness
+-- | Maximum for the fitness
 maxFit :: Double
 maxFit = fitFormula (World undefined undefined 10 undefined) 10 10 10
 

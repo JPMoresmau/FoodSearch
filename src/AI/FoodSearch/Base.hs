@@ -97,7 +97,8 @@ buildWorld sz pos = World sz pos maxSmell smells
            in waft (rest++ map (\n->(n,sm2)) ns) dm2
 
 
--- | Distance between two positions.
+-- | Smell distance between two positions. This is not the euclidean distance, 
+--   since diagonals count exactly like straight lines
 distance :: Position -> Position -> Int
 distance (a,b) (c,d) = maximum [abs $ a - c, abs $ b - d]
 

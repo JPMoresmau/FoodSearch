@@ -31,6 +31,7 @@ formatInputs w =   fromList . map (\i-> fromIntegral (snd i) / fromIntegral (wSm
 layerDef :: LayerDefinition Float
 layerDef = LayerDefinition sigmoidNeuron dirLength connectFully
 
+-- | The definition for all layers
 allLayersDef :: [LayerDefinition Float]
 allLayersDef = replicate 3 layerDef
 
