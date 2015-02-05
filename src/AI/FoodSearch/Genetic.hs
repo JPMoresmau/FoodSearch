@@ -73,7 +73,7 @@ maxFit = fitFormula (World undefined undefined 10 undefined) 10 10 10
 
 -- | Stop function
 stopf ::  NetworkData -> Int -> IO Bool
-stopf nd gen= return $ gen > 200 || fitness nd == maxFit
+stopf nd gen= return $ gen > 300 || fitness nd == maxFit
 
 -- | Build a random network data
 buildNetworkData :: (Monad m,RandomGen g) => [World] -> RandT g m NetworkData 
